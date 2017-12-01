@@ -6,6 +6,11 @@
   (q/frame-rate 30)
   (q/color-mode :hsb)
   {:color 0
+   :cells 30
+   :rows 30
+   :min-rad 4
+   :max-rad 16
+   :cell-size 22
    :angle 0})
 
 (defn update-state [state]
@@ -13,18 +18,14 @@
    :angle (+ (:angle state) 0.1)})
 
 (defn draw-state [state]
+  (q/no-loop)
   (q/background 240)
   (q/fill (:color state) 255 255)
-  (let [angle (:angle state)
-        x (* 150 (q/cos angle))
-        y (* 150 (q/sin angle))]
-    (q/with-translation [(/ (q/width) 2)
-                         (/ (q/height) 2)]
-      (q/ellipse x y 100 100))))
+      (q/ellipse 100 100 100 100))
 
 (q/defsketch dots
   :title "You spin my circle right round"
-  :size [500 500]
+  :size [820 820]
   :setup setup
   :update update-state
   :draw draw-state
