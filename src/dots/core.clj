@@ -3,7 +3,8 @@
             [quil.middleware :as m]))
 
 (defn build [state]
-  160)
+  [[[100, 660, 8], [100, 644, 4], [100, 632, 12]]
+   [[122, 660, 4], [122, 648, 4], [122, 636, 8]]])
 
 (defn setup []
   (q/frame-rate 30)
@@ -14,9 +15,14 @@
 
 (defn draw-state [state]
   (q/no-loop)
+  (q/no-stroke)
   (q/background 255)
-  (q/fill 100 255 255)
-    (q/ellipse 100 (:table state) 100 100))
+  (q/fill 100 100 100)
+
+  (doseq [col (:table state)
+          cell col]
+    (let [[x y rad] cell]
+      (q/ellipse x y rad rad))))
 
 (q/defsketch dots
   :title "Dots"
