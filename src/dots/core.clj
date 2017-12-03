@@ -10,31 +10,30 @@
           (/ prev-radius 2))
      radius]))
 
-(defn build-col [cells total threshold]
-  (if (> total threshold)
-    cells
-    (let [cell (apply build-cell (last cells))]
-      (recur
-        (conj cells cell)
-        (+ total (last cell))
-        threshold))))
+(defn build-col [cells threshold]
+  (let [last-cell (last cells)]
+    (if (< (second last-cell) threshold)
+      cells
+      (let [cell (apply build-cell last-cell)]
+        (recur
+          (conj cells cell)
+          threshold)))))
 
 (defn build [state]
   (for [col (range (:cols state))]
     (let [offset (* col (:col-size state))]
-      (build-col [[(+ 100 offset) 658 4]]
-                 0
-                 (:max-height state)))))
+      (build-col [[(+ 100 offset) 698 4]]
+                 (:min-y state)))))
   ;[[[100, 658, 4], [100, 648, 8], [100, 634, 12]]
   ; [[122, 658, 4], [122, 650, 4], [122, 640, 8]]])
 
 (defn setup []
-  (q/frame-rate 30)
+  (q/frame-rate 29)
   (q/color-mode :hsb)
   {:table
     (build
-      {:cols 30
-       :max-height 600
+      {:cols 29
+       :min-y 100
        :col-size 22})})
 
 (defn update-state [s] s)
@@ -52,7 +51,7 @@
 
 (q/defsketch dots
   :title "Dots"
-  :size [820 820]
+  :size [820 800]
   :setup setup
   :update update-state
   :draw draw-state
