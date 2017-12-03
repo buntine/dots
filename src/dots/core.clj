@@ -3,7 +3,7 @@
             [quil.middleware :as m]))
 
 (defn build-cell [x y prev-radius]
-  (let [radius 4]
+  (let [radius (max 6 (* (rand-int 8) 2))]
     [x
      (- y 4
           (/ radius 2)
@@ -21,11 +21,10 @@
 
 (defn build [state]
   (for [col (range (:cols state))]
-    (let [offset (* col (:col-size state))]
-      (build-col [[(+ 100 offset) 698 4]]
+    (let [offset (* col (:col-size state))
+          padding (:padding state)]
+      (build-col [[(+ padding offset) (- (:height state) padding) 0]]
                  (:min-y state)))))
-  ;[[[100, 658, 4], [100, 648, 8], [100, 634, 12]]
-  ; [[122, 658, 4], [122, 650, 4], [122, 640, 8]]])
 
 (defn setup []
   (q/frame-rate 29)
@@ -34,6 +33,8 @@
     (build
       {:cols 29
        :min-y 100
+       :height 800
+       :padding 100
        :col-size 22})})
 
 (defn update-state [s] s)
@@ -41,8 +42,8 @@
 (defn draw-state [state]
   (q/no-loop)
   (q/no-stroke)
-  (q/background 255)
-  (q/fill 0 0 50)
+  (q/background 220)
+  (q/fill 0 0 70)
 
   (doseq [col (:table state)
           cell col]
