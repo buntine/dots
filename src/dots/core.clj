@@ -3,6 +3,7 @@
             [quil.middleware :as m]))
 
 (defn build-cell [x y prev-radius]
+  (print x)
   (let [radius 4]
     [x
      (- y 4
