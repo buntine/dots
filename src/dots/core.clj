@@ -3,7 +3,6 @@
             [quil.middleware :as m]))
 
 (defn build-cell [x y prev-radius]
-  (print x)
   (let [radius 4]
     [x
      (- y 4
@@ -23,7 +22,7 @@
 (defn build [state]
   (for [col (range (:cols state))]
     (let [offset (* col (:col-size state))]
-      (build-col [(+ 100 offset) 658 4]
+      (build-col [[(+ 100 offset) 658 4]]
                  0
                  (:max-height state)))))
   ;[[[100, 658, 4], [100, 648, 8], [100, 634, 12]]
