@@ -43,11 +43,11 @@
   (q/no-loop)
   (q/no-stroke)
   (q/background 220)
-  (q/fill 0 0 70)
 
   (doseq [col (:table state)
           cell col]
     (let [[x y rad] cell]
+      (q/fill 137 118 (- 255 (* rad 9)))
       (q/ellipse x y rad rad))))
 
 (q/defsketch dots
