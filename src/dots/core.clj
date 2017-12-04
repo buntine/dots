@@ -37,12 +37,10 @@
        :padding 100
        :col-size 22})})
 
-(defn update-state [s] s)
-
 (defn draw-state [state]
   (q/no-loop)
   (q/no-stroke)
-  (q/background 220)
+  (q/background 240)
 
   (doseq [col (:table state)
           cell col]
@@ -54,7 +52,6 @@
   :title "Dots"
   :size [820 800]
   :setup setup
-  :update update-state
   :draw draw-state
   :features [:keep-on-top]
   :middleware [m/fun-mode])
