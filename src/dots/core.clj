@@ -22,18 +22,32 @@
 (defn build [state]
   (for [col (range (:cols state))]
     (let [offset (* col (:col-size state))
-          padding (:padding state)]
-      (build-col [[(+ padding offset) (- (:height state) padding) 0]]
-                 (:min-y state)))))
+          padding (:padding state)
+          threshold (+ (:min-y state)
+                       (rand (:y-variance state)))]
+      (build-col [[(+ padding offset)
+                   (- (:height state) padding)
+                   0]]
+                 threshold))))
+
+(defn color-for [rad]
+  (println rad)
+  (condp = rad
+    6 [156 212 238]
+    8 [134 138 170]
+    10 [177 73 65]
+    12 [38 30 17]
+    14 [166 181 187]
+    [150 150 200]))
 
 (defn setup []
   (q/frame-rate 29)
-  (q/color-mode :hsb)
   {:table
     (build
       {:cols 29
-       :min-y 100
-       :height 800
+       :min-y 70
+       :y-variance 120
+       :height 1000
        :padding 100
        :col-size 22})})
 
@@ -45,12 +59,13 @@
   (doseq [col (:table state)
           cell col]
     (let [[x y rad] cell]
-      (q/fill 137 118 (- 255 (* rad 9)))
+      (apply q/fill (color-for rad))
+      ;(q/fill 70 40 (- 255 (* rad 9)))
       (q/ellipse x y rad rad))))
 
 (q/defsketch dots
   :title "Dots"
-  :size [820 800]
+  :size [820 950]
   :setup setup
   :draw draw-state
   :features [:keep-on-top]
