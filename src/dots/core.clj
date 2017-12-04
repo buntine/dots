@@ -33,7 +33,6 @@
                  threshold))))
 
 (defn color-for [rad]
-  (println rad)
   (condp = rad
     6 [156 212 238]
     8 [134 138 170]
