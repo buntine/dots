@@ -26,7 +26,9 @@
           threshold (+ (:min-y state)
                        (rand (:y-variance state)))]
       (build-col [[(+ padding offset)
-                   (- (:height state) padding)
+                   (- (:height state)
+                      padding
+                      (rand (:y-variance state)))
                    0]]
                  threshold))))
 
@@ -46,7 +48,7 @@
     (build
       {:cols 29
        :min-y 70
-       :y-variance 120
+       :y-variance 250
        :height 1000
        :padding 100
        :col-size 22})})
@@ -60,7 +62,6 @@
           cell col]
     (let [[x y rad] cell]
       (apply q/fill (color-for rad))
-      ;(q/fill 70 40 (- 255 (* rad 9)))
       (q/ellipse x y rad rad))))
 
 (q/defsketch dots
