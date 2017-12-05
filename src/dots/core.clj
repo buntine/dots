@@ -63,8 +63,11 @@
       (apply q/fill (color-for rad))
       (q/ellipse x y rad rad)))
 
-  (let [epoch  (int (/ (System/currentTimeMillis) 1000))]
-    (q/save (str "./out/" epoch ".tif"))))
+  (let [epoch  (int (/ (System/currentTimeMillis) 1000))
+        path (str "./out/" epoch)]
+    (spit (str path ".txt")
+          (with-out-str (pr (:table state))))
+    (q/save (str path ".tif"))))
 
 (q/defsketch dots
   :title "Dots"
