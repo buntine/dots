@@ -3,10 +3,24 @@
             [quil.middleware :as m]
             [clojure.java.io :as io]))
 
+(def delta 1)
+(def min-rad 6)
+(def max-rad 8)
+(def padding 4)
+(def cols 29)
+(def min-y 70)
+(def y-variance 250)
+(def height 1000)
+(def y-padding 100)
+(def col-size 22)
+(def window-width 820)
+(def window-height 950)
+(def bg 240)
+
 (defn build-cell [x y prev-radius]
-  (let [radius (max 6 (* (rand-int 8) 2))]
+  (let [radius (max min-rad (* (rand-int max-rad) 2))]
     [x
-     (- y 4
+     (- y padding
           (/ radius 2)
           (/ prev-radius 2))
      radius]))
@@ -20,16 +34,15 @@
           (conj cells cell)
           threshold)))))
 
-(defn build [state]
-  (for [col (range (:cols state))]
-    (let [offset (* col (:col-size state))
-          padding (:padding state)
-          threshold (+ (:min-y state)
-                       (rand (:y-variance state)))]
-      (build-col [[(+ padding offset)
-                   (- (:height state)
-                      padding
-                      (rand (:y-variance state)))
+(defn build []
+  (for [col (range cols)]
+    (let [offset (* col col-size)
+          threshold (+ min-y
+                       (rand y-variance))]
+      (build-col [[(+ y-padding offset)
+                   (- height
+                      y-padding
+                      (rand y-variance))
                    0]]
                  threshold))))
 
@@ -50,23 +63,17 @@
           exists (.exists (io/as-file path))]
       (if exists
         (read-string (slurp path))
-        (build
-          {:cols 29
-           :min-y 70
-           :y-variance 250
-           :height 1000
-           :padding 100
-           :col-size 22})))})
+        (build)))})
 
 (defn draw-state [state]
   (q/no-loop)
   (q/no-stroke)
-  (q/background 240)
+  (q/background bg)
 
   (doseq [col (:table state)
           cell col]
-    (let [[x y rad] cell]
-      (apply q/fill (color-for rad))
+    (let [[x y rad] (map #(* % delta) cell)]
+      (apply q/fill (color-for (last cell)))
       (q/ellipse x y rad rad)))
 
   (let [epoch  (int (/ (System/currentTimeMillis) 1000))
@@ -77,7 +84,7 @@
 
 (q/defsketch dots
   :title "Dots"
-  :size [820 950]
+  :size [(* delta window-width) (* delta window-height)]
   :setup setup
   :draw draw-state
   :features [:keep-on-top]
