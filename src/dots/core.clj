@@ -61,7 +61,10 @@
           cell col]
     (let [[x y rad] cell]
       (apply q/fill (color-for rad))
-      (q/ellipse x y rad rad))))
+      (q/ellipse x y rad rad)))
+
+  (let [epoch  (int (/ (System/currentTimeMillis) 1000))]
+    (q/save (str "./out/" epoch ".tif"))))
 
 (q/defsketch dots
   :title "Dots"
