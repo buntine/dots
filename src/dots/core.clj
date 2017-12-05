@@ -1,6 +1,7 @@
 (ns dots.core
   (:require [quil.core :as q]
-            [quil.middleware :as m]))
+            [quil.middleware :as m]
+            [clojure.java.io :as io]))
 
 (defn build-cell [x y prev-radius]
   (let [radius (max 6 (* (rand-int 8) 2))]
@@ -43,14 +44,19 @@
 
 (defn setup []
   (q/frame-rate 29)
+
   {:table
-    (build
-      {:cols 29
-       :min-y 70
-       :y-variance 250
-       :height 1000
-       :padding 100
-       :col-size 22})})
+    (let [path "./state.txt"
+          exists (.exists (io/as-file path))]
+      (if exists
+        (read-string (slurp path))
+        (build
+          {:cols 29
+           :min-y 70
+           :y-variance 250
+           :height 1000
+           :padding 100
+           :col-size 22})))})
 
 (defn draw-state [state]
   (q/no-loop)
