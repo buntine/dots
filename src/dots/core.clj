@@ -7,14 +7,14 @@
 (def min-rad 6)
 (def max-rad 8)
 (def padding 4)
-(def cols 29)
+(def cols 24)
 (def min-y 70)
 (def y-variance 250)
 (def height 1000)
-(def y-padding 100)
+(def xy-padding 100)
 (def col-size 22)
-(def window-width 820)
-(def window-height 950)
+(def window-width 702)
+(def window-height 993)
 (def bg 240)
 
 (defn build-cell [x y prev-radius]
@@ -39,9 +39,9 @@
     (let [offset (* col col-size)
           threshold (+ min-y
                        (rand y-variance))]
-      (build-col [[(+ y-padding offset)
+      (build-col [[(+ xy-padding offset)
                    (- height
-                      y-padding
+                      xy-padding
                       (rand y-variance))
                    0]]
                  threshold))))
