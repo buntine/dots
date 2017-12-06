@@ -68,12 +68,28 @@
             (reduce + acc y)) acc x)) 0 data)))
 
 (defn draw-dots [data]
-  (let [cs (int (checksum data))]
     (doseq [col data
             cell col]
       (let [[x y rad] (map #(* % delta) cell)]
         (apply q/fill (color-for (last cell)))
-        (q/ellipse x y rad rad)))))
+        (q/ellipse x y rad rad))))
+
+(defn draw-checksum [cs]
+  (let [w (* delta window-width)
+        h (* delta window-height)]
+    (q/fill checksum-fg)
+    (q/text-align :center :bottom)
+    (q/text-size checksum-size)
+    (q/text
+      (s/upper-case (format "%x" cs))
+      0 0 w (- h checksum-padding))))
+
+(defn persist [data]
+  (let [epoch  (int (/ (System/currentTimeMillis) 1000))
+        path (str "./out/" epoch)]
+    (spit (str path ".txt")
+          (with-out-str (pr data)))
+    (q/save (str path ".tif"))))
 
 (defn setup []
   (q/frame-rate 29)
@@ -90,22 +106,11 @@
   (q/no-stroke)
   (q/background bg)
 
-  (draw-dots (:table state))
-
-    (let [w (* delta window-width)
-          h (* delta window-height)]
-      (q/fill checksum-fg)
-      (q/text-align :center :bottom)
-      (q/text-size checksum-size)
-      (q/text
-        (s/upper-case (format "%x" cs))
-        0 0 w (- h checksum-padding)))
-
-    (let [epoch  (int (/ (System/currentTimeMillis) 1000))
-          path (str "./out/" epoch)]
-      (spit (str path ".txt")
-            (with-out-str (pr data)))
-      (q/save (str path ".tif")))))
+  (let [data (:table state)
+        cs (int (checksum data))]
+    (draw-dots data)
+    (draw-checksum cs)
+    (persist data)))
 
 (q/defsketch dots
   :title "Dots"
