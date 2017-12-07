@@ -10,7 +10,7 @@
 (def padding 4)
 (def cols 26)
 (def min-y 70)
-(def y-variance 250)
+(def y-variance 270)
 (def height 1000)
 (def xy-padding 75)
 (def checksum-padding (* delta 30))
