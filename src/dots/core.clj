@@ -78,8 +78,9 @@
   (let [w (* delta window-width)
         h (* delta window-height)]
     (q/fill checksum-fg)
+    (q/text-font
+      (q/create-font "Rajdhani-Medium" checksum-size true))
     (q/text-align :center :bottom)
-    (q/text-size checksum-size)
     (q/text
       (s/upper-case (format "%x" cs))
       0 0 w (- h checksum-padding))))
