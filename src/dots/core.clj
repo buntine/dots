@@ -15,10 +15,10 @@
 (def xy-padding 75)
 (def checksum-padding (* delta 30))
 (def col-size 22)
-(def window-width 702)
-(def window-height 993)
-(def bg 231)
-(def checksum-fg 80)
+(def window-width 703)
+(def window-height 994)
+(def bg 233)
+(def checksum-fg  [166 181 187])
 (def checksum-size (* delta 14))
 
 (defn build-cell [x y prev-radius]
@@ -77,9 +77,9 @@
 (defn draw-checksum [cs]
   (let [w (* delta window-width)
         h (* delta window-height)]
-    (q/fill checksum-fg)
+    (apply q/fill checksum-fg)
     (q/text-font
-      (q/create-font "Rajdhani-Medium" checksum-size true))
+      (q/create-font "Simplifica" checksum-size true))
     (q/text-align :center :bottom)
     (q/text
       (s/upper-case (format "%x" cs))
